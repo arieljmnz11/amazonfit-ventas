@@ -1,0 +1,10 @@
+[tool.ruff]
+line-length = 120
+extend-exclude = ["original"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "N", "D", "I"]
+ignore = ["D100", "D104", "D203", "D213", "D400", "D415"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D103"]

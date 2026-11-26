@@ -1,0 +1,28 @@
+name: CI AmazonFit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v7
+
+      - name: Configurar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-dev.txt
+
+      - name: Revisar estilo con Ruff
+        run: ruff check .
+
+      - name: Ejecutar pruebas con cobertura
+        run: pytest --cov=amazonfit --cov-report=term-missing
