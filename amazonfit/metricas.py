@@ -21,6 +21,7 @@ def agregar_ingreso(ventas: pd.DataFrame) -> pd.DataFrame:
         Copia de las ventas con la columna ``ingreso`` en dólares.
 
     """
+    # np.where aplica el descuento a todas las filas a la vez, sin un if por cada venta
     factor_pago = np.where(ventas["metodo_pago"] == "Efectivo", 1 - DESCUENTO_EFECTIVO, 1.0)
     return ventas.assign(ingreso=ventas["cantidad"] * ventas["precio_unitario"] * factor_pago)
 
@@ -45,6 +46,7 @@ def ingresos_por_mes(ventas: pd.DataFrame) -> pd.Series:
     Agrupa por periodo mensual y convierte a texto solo las etiquetas del
     resultado, no las 200 000 fechas, porque esa conversión fila por fila es lenta.
     """
+    # to_period agrupa por mes mucho más rápido que convertir cada fecha a texto con strftime    
     por_mes = ventas.groupby(ventas["fecha"].dt.to_period("M"))["ingreso"].sum().round(2).sort_index()
     por_mes.index = por_mes.index.astype(str)
     return por_mes
